@@ -32,7 +32,7 @@ const recognition = [
     {
         title: "SaaS Competition Winner",
         description: "Won a SaaS market competition with MiniMock.",
-        link: "https://github.com/TuShArBhArDwA/MiniMock"
+        link: "https://x.com/joni_vrbt/status/2028263528583348552?s=20"
     },
     {
         title: "LeetCode Problem Reviewer",
@@ -47,14 +47,14 @@ const recognition = [
 ];
 
 const projects = [
-    { name: "MiniLink", desc: "Link-in-bio platform for developers. Free forever.", url: "https://minianonlink.vercel.app/tusharbhardwaj" },
+    { name: "MiniLink", desc: "Link-in-bio platform for developers. Free forever.", url: "https://minianonlink.vercel.app/" },
     { name: "MiniVouch", desc: "This very platform — collect and showcase real testimonials.", url: "https://minianonvouch.vercel.app" },
     { name: "Weaave", desc: "Build, connect, and deploy AI workflows visually.", url: "https://weaave.vercel.app/" },
-    { name: "MiniMock", desc: "Instant chat, social media, and AI mockups. No watermark.", url: "https://github.com/TuShArBhArDwA/MiniMock" },
+    { name: "MiniMock", desc: "Instant chat, social media, and AI mockups. No watermark.", url: "https://minianonmock.vercel.app/" },
     { name: "PulseAI Prep", desc: "AI-driven interview prep with mock interviews and feedback.", url: "https://github.com/TuShArBhArDwA/PulseAI" },
-    { name: "MiniRizz", desc: "Your AI Wingman — never get left on read again.", url: "https://github.com/TuShArBhArDwA/minirizz" },
+    { name: "MiniRizz", desc: "Your AI Wingman — never get left on read again.", url: "https://minirizz.vercel.app/" },
     { name: "HireMe", desc: "Full-stack job portal for discovery, applications, and postings.", url: "https://github.com/TuShArBhArDwA/HireMe" },
-    { name: "AnonBeats", desc: "Personal, ad-free music player for streaming and playlists.", url: "https://github.com/TuShArBhArDwA/AnonBeats" },
+    { name: "AnonBeats", desc: "Personal, ad-free music player for streaming and playlists.", url: "https://anon-beats.vercel.app/" },
 ];
 
 export default function AboutPage() {
@@ -107,7 +107,7 @@ export default function AboutPage() {
                     {/* CTAs */}
                     <div style={{ display: "flex", gap: "0.75rem", justifyContent: "center", flexWrap: "wrap" }}>
                         <a
-                            href="https://minianonlink.vercel.app/tusharbhardwaj"
+                            href="https://minianonlink.vercel.app/"
                             target="_blank" rel="noopener noreferrer"
                             className="btn-primary"
                             style={{ textDecoration: "none", padding: "0.75rem 2rem", fontSize: "0.9375rem" }}
