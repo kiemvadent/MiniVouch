@@ -1,8 +1,9 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useUser } from "@clerk/nextjs";
 import { StatusBadge } from "@/components/status-badge";
+import Image from "next/image";
+import Link from "next/link";
 
 interface Testimonial {
     id: string;
@@ -11,6 +12,7 @@ interface Testimonial {
     message: string;
     is_anonymous: boolean;
     image_url?: string | null;
+    attachment_url?: string | null;
     status: "pending" | "approved" | "rejected";
     created_at: string;
 }
@@ -18,7 +20,6 @@ interface Testimonial {
 type Tab = "pending" | "approved" | "rejected";
 
 export default function AdminPage() {
-    const { user } = useUser();
     const [testimonials, setTestimonials] = useState<Testimonial[]>([]);
     const [loading, setLoading] = useState(true);
     const [activeTab, setActiveTab] = useState<Tab>("pending");
@@ -39,7 +40,9 @@ export default function AdminPage() {
                 return;
             }
             const data = await res.json();
-            setTestimonials(data);
+            if (Array.isArray(data)) {
+                setTestimonials(data);
+            }
         } catch {
             // Handle error silently
         }
@@ -81,28 +84,92 @@ export default function AdminPage() {
         setActionLoading(null);
     }
 
-    // Unauthorized view
+    // Beautiful unauthorized view
     if (unauthorized) {
         return (
-            <div style={{ maxWidth: "36rem", margin: "0 auto", padding: "4rem 1.5rem" }}>
+            <div
+                style={{
+                    minHeight: "calc(100vh - 4rem)",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    padding: "2rem",
+                }}
+            >
                 <div
-                    className="card"
-                    style={{ padding: "3rem 2rem", textAlign: "center" }}
+                    className="animate-fade-in-up"
+                    style={{
+                        maxWidth: "28rem",
+                        textAlign: "center",
+                    }}
                 >
-                    <p style={{ fontSize: "2.5rem", marginBottom: "1rem" }}>🔒</p>
-                    <h2
+                    {/* Gradient ✦ logo — same as navbar */}
+                    <div
                         style={{
-                            fontSize: "1.25rem",
-                            fontWeight: 700,
-                            marginBottom: "0.5rem",
-                            color: "var(--color-foreground)",
+                            width: "6rem",
+                            height: "6rem",
+                            borderRadius: "1.5rem",
+                            background: "linear-gradient(135deg, #818cf8, #c084fc)",
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "center",
+                            fontSize: "2.75rem",
+                            color: "white",
+                            fontWeight: 900,
+                            margin: "0 auto 2rem",
+                            boxShadow: "0 12px 32px rgba(129, 140, 248, 0.3)",
+                            animation: "float 3s ease-in-out infinite",
                         }}
                     >
-                        Access Denied
+                        ✦
+                    </div>
+                    <h2
+                        style={{
+                            fontSize: "1.75rem",
+                            fontWeight: 800,
+                            marginBottom: "0.75rem",
+                            letterSpacing: "-0.025em",
+                        }}
+                    >
+                        <span className="gradient-text">Mini Anon&apos;s</span> private space
                     </h2>
-                    <p style={{ color: "var(--color-muted)", fontSize: "0.9375rem" }}>
-                        You don&apos;t have permission to view this page.
+                    <p
+                        style={{
+                            color: "var(--color-muted)",
+                            fontSize: "1rem",
+                            lineHeight: 1.6,
+                            marginBottom: "0.5rem",
+                        }}
+                    >
+                        This area is intentionally private — it&apos;s where Mini Anon reviews and curates testimonials.
                     </p>
+                    <p
+                        style={{
+                            color: "var(--color-muted)",
+                            fontSize: "0.875rem",
+                            lineHeight: 1.6,
+                            marginBottom: "2rem",
+                            opacity: 0.7,
+                        }}
+                    >
+                        If you&apos;re here to leave a testimonial, head over to the Submit page — Mini Anon would love to hear from you! ✨
+                    </p>
+                    <div style={{ display: "flex", gap: "0.75rem", justifyContent: "center" }}>
+                        <Link
+                            href="/"
+                            className="btn-primary"
+                            style={{ textDecoration: "none" }}
+                        >
+                            Back to Home
+                        </Link>
+                        <Link
+                            href="/submit"
+                            className="btn-outline"
+                            style={{ textDecoration: "none" }}
+                        >
+                            Leave a Testimonial
+                        </Link>
+                    </div>
                 </div>
             </div>
         );
@@ -113,7 +180,7 @@ export default function AdminPage() {
 
     return (
         <div style={{ maxWidth: "56rem", margin: "0 auto", padding: "3rem 1.5rem" }}>
-            <div style={{ marginBottom: "2rem" }}>
+            <div className="animate-fade-in-up" style={{ marginBottom: "2rem" }}>
                 <h1
                     style={{
                         fontSize: "1.75rem",
@@ -123,7 +190,7 @@ export default function AdminPage() {
                         marginBottom: "0.5rem",
                     }}
                 >
-                    Admin Panel
+                    Admin <span className="gradient-text">Panel</span>
                 </h1>
                 <p style={{ color: "var(--color-muted)", fontSize: "0.9375rem" }}>
                     Manage submitted testimonials. Approve, reject, or delete entries.
@@ -132,6 +199,7 @@ export default function AdminPage() {
 
             {/* Tabs */}
             <div
+                className="animate-fade-in-up"
                 style={{
                     display: "flex",
                     gap: "0.25rem",
@@ -140,10 +208,19 @@ export default function AdminPage() {
                     backgroundColor: "var(--color-muted-light)",
                     borderRadius: "0.75rem",
                     width: "fit-content",
+                    border: "1px solid var(--color-border)",
+                    animationDelay: "0.1s",
+                    opacity: 0,
+                    animationFillMode: "forwards",
                 }}
             >
                 {tabs.map((tab) => {
                     const count = testimonials.filter((t) => t.status === tab).length;
+                    const colorMap = {
+                        pending: "#fbbf24",
+                        approved: "#34d399",
+                        rejected: "#f87171",
+                    };
                     return (
                         <button
                             key={tab}
@@ -152,19 +229,21 @@ export default function AdminPage() {
                                 padding: "0.5rem 1rem",
                                 borderRadius: "0.5rem",
                                 border: "none",
-                                fontSize: "0.875rem",
+                                fontSize: "0.8125rem",
                                 fontWeight: 500,
                                 cursor: "pointer",
-                                transition: "all 0.15s ease",
+                                transition: "all 0.2s ease",
                                 backgroundColor:
-                                    activeTab === tab ? "white" : "transparent",
+                                    activeTab === tab
+                                        ? "var(--color-background-secondary)"
+                                        : "transparent",
                                 color:
                                     activeTab === tab
-                                        ? "var(--color-foreground)"
+                                        ? colorMap[tab]
                                         : "var(--color-muted)",
                                 boxShadow:
                                     activeTab === tab
-                                        ? "0 1px 3px rgba(0,0,0,0.08)"
+                                        ? "0 1px 3px rgba(0,0,0,0.2)"
                                         : "none",
                             }}
                         >
@@ -172,7 +251,7 @@ export default function AdminPage() {
                             <span
                                 style={{
                                     marginLeft: "0.375rem",
-                                    fontSize: "0.75rem",
+                                    fontSize: "0.6875rem",
                                     opacity: 0.7,
                                 }}
                             >
@@ -186,24 +265,14 @@ export default function AdminPage() {
             {/* Loading */}
             {loading && (
                 <div style={{ display: "flex", justifyContent: "center", padding: "4rem 0" }}>
-                    <div
-                        style={{
-                            width: "2rem",
-                            height: "2rem",
-                            border: "3px solid var(--color-border)",
-                            borderTopColor: "var(--color-primary)",
-                            borderRadius: "9999px",
-                            animation: "spin 0.8s linear infinite",
-                        }}
-                    />
-                    <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
+                    <div className="loader" />
                 </div>
             )}
 
             {/* Empty */}
             {!loading && filtered.length === 0 && (
                 <div
-                    className="card"
+                    className="card animate-fade-in"
                     style={{ padding: "3rem 2rem", textAlign: "center" }}
                 >
                     <p style={{ color: "var(--color-muted)", fontSize: "0.9375rem" }}>
@@ -215,11 +284,16 @@ export default function AdminPage() {
             {/* Testimonials List */}
             {!loading && filtered.length > 0 && (
                 <div style={{ display: "flex", flexDirection: "column", gap: "0.75rem" }}>
-                    {filtered.map((t) => (
+                    {filtered.map((t, i) => (
                         <div
                             key={t.id}
-                            className="card"
-                            style={{ padding: "1.25rem 1.5rem" }}
+                            className="card animate-fade-in-up"
+                            style={{
+                                padding: "1.25rem 1.5rem",
+                                animationDelay: `${0.15 + i * 0.05}s`,
+                                opacity: 0,
+                                animationFillMode: "forwards",
+                            }}
                         >
                             <div
                                 style={{
@@ -234,7 +308,7 @@ export default function AdminPage() {
                                         style={{
                                             fontWeight: 600,
                                             fontSize: "0.9375rem",
-                                            color: "var(--color-card-foreground)",
+                                            color: "var(--color-foreground)",
                                         }}
                                     >
                                         {t.is_anonymous ? "Anonymous" : t.name}
@@ -261,13 +335,41 @@ export default function AdminPage() {
                             <p
                                 style={{
                                     fontSize: "0.9375rem",
-                                    lineHeight: 1.6,
+                                    lineHeight: 1.7,
                                     color: "var(--color-card-foreground)",
                                     marginBottom: "1rem",
                                 }}
                             >
                                 {t.message}
                             </p>
+
+                            {/* Attachment Image */}
+                            {t.attachment_url && (
+                                <div
+                                    style={{
+                                        borderRadius: "0.75rem",
+                                        overflow: "hidden",
+                                        border: "1px solid var(--color-border)",
+                                        marginBottom: "1rem",
+                                        maxWidth: "300px",
+                                    }}
+                                >
+                                    <Image
+                                        src={t.attachment_url}
+                                        alt="Attachment"
+                                        width={500}
+                                        height={500}
+                                        style={{
+                                            width: "100%",
+                                            height: "auto",
+                                            maxHeight: "300px",
+                                            objectFit: "contain",
+                                            backgroundColor: "var(--color-muted-light)",
+                                            display: "block",
+                                        }}
+                                    />
+                                </div>
+                            )}
 
                             <div
                                 style={{
@@ -310,7 +412,8 @@ export default function AdminPage() {
                         </div>
                     ))}
                 </div>
-            )}
-        </div>
+            )
+            }
+        </div >
     );
 }
