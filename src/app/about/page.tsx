@@ -112,7 +112,7 @@ export default function AboutPage() {
                             className="btn-primary"
                             style={{ textDecoration: "none", padding: "0.75rem 2rem", fontSize: "0.9375rem" }}
                         >
-                            Find me everywhere ✦
+                            Find me everywhere
                         </a>
                         <a
                             href="https://tushar-bhardwaj.vercel.app/"
@@ -226,6 +226,18 @@ export default function AboutPage() {
                                 <ExternalLink size={14} color="var(--color-muted)" style={{ flexShrink: 0 }} />
                             </a>
                         ))}
+                    </div>
+                    {/* GitHub CTA */}
+                    <div style={{ marginTop: "1rem", textAlign: "center" }}>
+                        <a
+                            href="https://github.com/TuShArBhArDwA"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="btn-outline"
+                            style={{ textDecoration: "none", padding: "0.625rem 1.5rem", fontSize: "0.875rem" }}
+                        >
+                            More on GitHub →
+                        </a>
                     </div>
                 </section>
 
