@@ -106,11 +106,27 @@ MiniVouch is designed with security as a priority:
 - **Database Access:** Client-side interaction is restricted. API routes perform all reads/writes using the Supabase Service Role key, verifying Clerk sessions on the server side securely.
 - **RLS Policies:** Applied at the Supabase level to ensure no unauthorized direct access occurs.
 
+---
+
+## Sponsor
+
+If you find this helpful, consider supporting me:
+
+- **Sponsor Me:** [Buy Me a Coffee!](https://github.com/sponsors/TuShArBhArDwA)
+
+---
+
 ## License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
 ---
-<div align="center">
-  <b>Made with by Tushar Bhardwaj (Mini Anon)</b>
-</div>
+
+## Connect with me
+
+If you’d like to connect, feel free to reach out — [Click here](https://minianonlink.vercel.app/tusharbhardwaj)
+
+
+---
+
+**[Try MiniVouch](https://minianonvouch.vercel.app/)** | **[Submit Feedback](https://github.com/TuShArBhArDwA/MiniLink/issues)**
