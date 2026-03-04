@@ -50,7 +50,7 @@ export function Footer() {
 
                     {/* MiniLink — no icon */}
                     <a
-                        href="https://linktr.ee/minianon"
+                        href="https://minianonlink.vercel.app/tusharbhardwaj"
                         target="_blank"
                         rel="noopener noreferrer"
                         style={{

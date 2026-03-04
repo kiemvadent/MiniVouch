@@ -34,7 +34,7 @@ export async function POST(req: NextRequest) {
         const user = await currentUser();
         const body = await req.json();
 
-        const { message, name, profession, is_anonymous, attachment_url } = body;
+        const { message, name, profession, is_anonymous, attachment_url, image_url } = body;
 
         if (!message || !message.trim()) {
             return NextResponse.json(
@@ -47,7 +47,9 @@ export async function POST(req: NextRequest) {
             ? "Anonymous"
             : name?.trim() || user?.fullName || "Anonymous";
 
-        const imageUrl = is_anonymous ? null : user?.imageUrl || null;
+        const finalImageUrl = is_anonymous
+            ? null
+            : (image_url !== undefined ? image_url : (user?.imageUrl || null));
 
         const supabase = getSupabase();
         const { data, error } = await supabase
@@ -59,7 +61,7 @@ export async function POST(req: NextRequest) {
                 message: message.trim(),
                 is_anonymous: !!is_anonymous,
                 status: "pending",
-                image_url: imageUrl,
+                image_url: finalImageUrl,
                 attachment_url: attachment_url || null,
             })
             .select()

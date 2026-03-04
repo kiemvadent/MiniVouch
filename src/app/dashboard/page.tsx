@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { StatusBadge } from "@/components/status-badge";
 import Image from "next/image";
 import Link from "next/link";
+import { Clock, CheckCircle2, XCircle } from "lucide-react";
 
 interface Testimonial {
     id: string;
@@ -108,9 +109,9 @@ export default function DashboardPage() {
                     }}
                 >
                     {[
-                        { label: "Pending", count: counts.pending, color: "#fbbf24", bg: "rgba(251, 191, 36, 0.08)", icon: "⏳" },
-                        { label: "Approved", count: counts.approved, color: "#34d399", bg: "rgba(52, 211, 153, 0.08)", icon: "✓" },
-                        { label: "Rejected", count: counts.rejected, color: "#f87171", bg: "rgba(248, 113, 113, 0.08)", icon: "✕" },
+                        { label: "Pending", count: counts.pending, color: "#fbbf24", bg: "rgba(251, 191, 36, 0.08)", icon: <Clock size={20} /> },
+                        { label: "Approved", count: counts.approved, color: "#34d399", bg: "rgba(52, 211, 153, 0.08)", icon: <CheckCircle2 size={20} /> },
+                        { label: "Rejected", count: counts.rejected, color: "#f87171", bg: "rgba(248, 113, 113, 0.08)", icon: <XCircle size={20} /> },
                     ].map((stat) => (
                         <div
                             key={stat.label}
@@ -365,17 +366,6 @@ export default function DashboardPage() {
                                 }}
                             >
                                 <div style={{ flex: 1, minWidth: 0 }}>
-                                    <p
-                                        style={{
-                                            fontSize: "0.9375rem",
-                                            lineHeight: 1.7,
-                                            color: "var(--color-card-foreground)",
-                                            marginBottom: "0.5rem",
-                                        }}
-                                    >
-                                        {t.message}
-                                    </p>
-
                                     {/* Attachment */}
                                     {t.attachment_url && (
                                         <div
@@ -383,7 +373,7 @@ export default function DashboardPage() {
                                                 borderRadius: "0.5rem",
                                                 overflow: "hidden",
                                                 border: "1px solid var(--color-border)",
-                                                marginBottom: "0.5rem",
+                                                marginBottom: "0.75rem",
                                                 maxWidth: "200px",
                                             }}
                                         >
@@ -400,6 +390,17 @@ export default function DashboardPage() {
                                             />
                                         </div>
                                     )}
+
+                                    <p
+                                        style={{
+                                            fontSize: "0.9375rem",
+                                            lineHeight: 1.7,
+                                            color: "var(--color-card-foreground)",
+                                            marginBottom: "0.5rem",
+                                        }}
+                                    >
+                                        {t.message}
+                                    </p>
 
                                     <p style={{ fontSize: "0.75rem", color: "var(--color-muted)" }}>
                                         {new Date(t.created_at).toLocaleDateString("en-US", {

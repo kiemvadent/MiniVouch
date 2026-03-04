@@ -15,21 +15,34 @@ interface Testimonial {
     created_at: string;
 }
 
+const WORDS = ["Mentees", "Recruiters", "Clients", "Students", "Peers", "Senior Devs", "Hiring Managers", "Collaborators"];
+
 export default function HomePage() {
     const [testimonials, setTestimonials] = useState<Testimonial[]>([]);
     const [loading, setLoading] = useState(true);
-    const [visibleCount, setVisibleCount] = useState(9); // Pagination state
+    const [visibleCount, setVisibleCount] = useState(9);
+    const [wordIndex, setWordIndex] = useState(0);
+    const [animating, setAnimating] = useState(false);
 
     useEffect(() => {
         fetch("/api/testimonials")
             .then((res) => res.json())
             .then((data) => {
-                if (Array.isArray(data)) {
-                    setTestimonials(data);
-                }
+                if (Array.isArray(data)) setTestimonials(data);
                 setLoading(false);
             })
             .catch(() => setLoading(false));
+    }, []);
+
+    useEffect(() => {
+        const interval = setInterval(() => {
+            setAnimating(true);
+            setTimeout(() => {
+                setWordIndex((prev) => (prev + 1) % WORDS.length);
+                setAnimating(false);
+            }, 300);
+        }, 3000);
+        return () => clearInterval(interval);
     }, []);
 
     const visibleTestimonials = testimonials.slice(0, visibleCount);
@@ -49,7 +62,9 @@ export default function HomePage() {
                 <div
                     className="animate-fade-in-up"
                     style={{
-                        display: "inline-block",
+                        display: "inline-flex",
+                        alignItems: "center",
+                        gap: "0.5rem",
                         padding: "0.375rem 1rem",
                         borderRadius: "9999px",
                         border: "1px solid var(--color-border)",
@@ -59,7 +74,8 @@ export default function HomePage() {
                         background: "var(--color-muted-light)",
                     }}
                 >
-                    ✦ Real feedback from real people
+                    <span className="live-dot" />
+                    Real feedback from real people
                 </div>
                 <h1
                     className="animate-fade-in-up"
@@ -67,15 +83,40 @@ export default function HomePage() {
                         fontSize: "clamp(2rem, 5vw, 3.5rem)",
                         fontWeight: 800,
                         letterSpacing: "-0.04em",
-                        lineHeight: 1.1,
+                        lineHeight: 1.15,
                         marginBottom: "1rem",
                         animationDelay: "0.1s",
                         opacity: 0,
                         animationFillMode: "forwards",
                     }}
                 >
-                    What People Are{" "}
-                    <span className="gradient-text">Saying</span>
+                    What
+                    <br />
+                    <span
+                        style={{
+                            display: "inline-block",
+                            overflow: "hidden",
+                            height: "1.2em",
+                            verticalAlign: "bottom",
+                        }}
+                    >
+                        <span
+                            style={{
+                                display: "inline-block",
+                                whiteSpace: "nowrap",
+                                transition: "transform 0.3s cubic-bezier(0.4,0,0.2,1), opacity 0.3s ease",
+                                transform: animating ? "translateY(-110%)" : "translateY(0)",
+                                opacity: animating ? 0 : 1,
+                                background: "linear-gradient(to right, #818cf8, #c084fc)",
+                                WebkitBackgroundClip: "text",
+                                WebkitTextFillColor: "transparent",
+                            }}
+                        >
+                            {WORDS[wordIndex]}
+                        </span>
+                    </span>
+                    <br />
+                    Are Saying
                 </h1>
                 <p
                     className="animate-fade-in-up"
@@ -99,6 +140,10 @@ export default function HomePage() {
                         animationDelay: "0.3s",
                         opacity: 0,
                         animationFillMode: "forwards",
+                        display: "flex",
+                        gap: "0.75rem",
+                        justifyContent: "center",
+                        flexWrap: "wrap",
                     }}
                 >
                     <Link
@@ -108,6 +153,15 @@ export default function HomePage() {
                     >
                         Share Your Experience →
                     </Link>
+                    <a
+                        href="https://tushar-bhardwaj.vercel.app/"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="btn-outline"
+                        style={{ textDecoration: "none", padding: "0.75rem 2rem", fontSize: "0.9375rem" }}
+                    >
+                        Who is Mini Anon?
+                    </a>
                 </div>
             </div>
 

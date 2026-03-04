@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useUser } from "@clerk/nextjs";
 import Image from "next/image";
+import { Paperclip, X, AlertCircle, Loader2, Upload, PartyPopper, Check, MessageSquarePlus } from "lucide-react";
 
 export default function SubmitPage() {
     const { user } = useUser();
@@ -19,9 +20,19 @@ export default function SubmitPage() {
     const [imagePreview, setImagePreview] = useState<string | null>(null);
     const [uploadingImage, setUploadingImage] = useState(false);
 
+    // Avatar upload state
+    const [avatarFile, setAvatarFile] = useState<File | null>(null);
+    const [avatarPreview, setAvatarPreview] = useState<string | null>(user?.imageUrl || null);
+    const [avatarRemoved, setAvatarRemoved] = useState(false);
+
     // Update name when user loads
     if (user?.fullName && !name && !isAnonymous) {
         setName(user.fullName);
+    }
+
+    // Update avatarPreview when user loads (if not already changed)
+    if (user?.imageUrl && !avatarPreview && !avatarRemoved && !avatarFile) {
+        setAvatarPreview(user.imageUrl);
     }
 
     function handleImageSelect(file: File | null) {
@@ -46,6 +57,30 @@ export default function SubmitPage() {
         setImagePreview(null);
     }
 
+    function handleAvatarSelect(file: File | null) {
+        if (!file) return;
+        if (file.size > 5 * 1024 * 1024) {
+            setError("Avatar must be under 5MB");
+            return;
+        }
+        if (!["image/jpeg", "image/png", "image/webp", "image/gif"].includes(file.type)) {
+            setError("Only JPEG, PNG, WebP, and GIF images are allowed for avatar");
+            return;
+        }
+        setError("");
+        setAvatarFile(file);
+        setAvatarRemoved(false);
+        const reader = new FileReader();
+        reader.onloadend = () => setAvatarPreview(reader.result as string);
+        reader.readAsDataURL(file);
+    }
+
+    function removeAvatar() {
+        setAvatarFile(null);
+        setAvatarPreview(null);
+        setAvatarRemoved(true);
+    }
+
     async function handleSubmit(e: React.FormEvent) {
         e.preventDefault();
         setLoading(true);
@@ -53,6 +88,7 @@ export default function SubmitPage() {
 
         try {
             let attachmentUrl = null;
+            let finalAvatarUrl = undefined;
 
             // Upload image if selected
             if (imageFile) {
@@ -75,6 +111,23 @@ export default function SubmitPage() {
                 setUploadingImage(false);
             }
 
+            // Upload avatar if selected
+            if (avatarFile) {
+                setUploadingImage(true);
+                const formData = new FormData();
+                formData.append("file", avatarFile);
+                const uploadRes = await fetch("/api/upload", { method: "POST", body: formData });
+                if (!uploadRes.ok) {
+                    const data = await uploadRes.json();
+                    throw new Error(data.error || "Failed to upload avatar");
+                }
+                const uploadData = await uploadRes.json();
+                finalAvatarUrl = uploadData.url;
+                setUploadingImage(false);
+            } else if (avatarRemoved) {
+                finalAvatarUrl = null;
+            }
+
             const res = await fetch("/api/testimonials", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
@@ -84,6 +137,7 @@ export default function SubmitPage() {
                     profession: isAnonymous ? "" : profession,
                     is_anonymous: isAnonymous,
                     attachment_url: attachmentUrl,
+                    image_url: finalAvatarUrl,
                 }),
             });
 
@@ -135,7 +189,7 @@ export default function SubmitPage() {
                             boxShadow: "0 8px 24px rgba(16, 185, 129, 0.3)",
                         }}
                     >
-                        ✓
+                        <Check size={32} color="white" />
                     </div>
                     <h2
                         style={{
@@ -143,9 +197,13 @@ export default function SubmitPage() {
                             fontWeight: 700,
                             color: "var(--color-foreground)",
                             marginBottom: "0.75rem",
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "center",
+                            gap: "0.5rem"
                         }}
                     >
-                        Thank you! 🎉
+                        Thank you! <PartyPopper size={24} className="text-primary" />
                     </h2>
                     <p
                         style={{
@@ -194,9 +252,12 @@ export default function SubmitPage() {
                             color: "var(--color-muted)",
                             marginBottom: "1rem",
                             background: "var(--color-muted-light)",
+                            display: "inline-flex",
+                            alignItems: "center",
+                            gap: "0.375rem"
                         }}
                     >
-                        ✍ Share your experience
+                        <MessageSquarePlus size={14} /> Share your experience
                     </div>
                     <h1
                         className="animate-fade-in-up gradient-text"
@@ -269,34 +330,56 @@ export default function SubmitPage() {
                             </div>
                         </label>
 
-                        {/* Name & Profession row */}
+                        {/* Profile Photo & Name/Profession */}
                         {!isAnonymous && (
-                            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "0.75rem" }}>
-                                <div>
-                                    <label style={{ display: "block", fontSize: "0.8125rem", fontWeight: 600, color: "var(--color-muted)", marginBottom: "0.5rem" }}>
-                                        Your Name
+                            <div style={{ display: "flex", gap: "1.25rem", alignItems: "flex-start" }}>
+                                {/* Avatar Upload */}
+                                <div style={{ flexShrink: 0, display: "flex", flexDirection: "column", alignItems: "center", gap: "0.5rem" }}>
+                                    <label style={{ display: "block", fontSize: "0.8125rem", fontWeight: 600, color: "var(--color-muted)", alignSelf: "flex-start" }}>
+                                        Photo
                                     </label>
-                                    <input
-                                        className="input"
-                                        type="text"
-                                        placeholder="John Doe"
-                                        value={name}
-                                        onChange={(e) => setName(e.target.value)}
-                                        required={!isAnonymous}
-                                    />
+                                    <div style={{ position: "relative", width: "3.5rem", height: "3.5rem" }}>
+                                        {avatarPreview ? (
+                                            <div style={{ position: "relative", width: "100%", height: "100%", borderRadius: "9999px", overflow: "visible" }}>
+                                                {/* eslint-disable-next-line @next/next/no-img-element */}
+                                                <img src={avatarPreview} alt="Avatar" style={{ borderRadius: "9999px", objectFit: "cover", width: "100%", height: "100%", border: "2px solid var(--color-border)" }} />
+                                                <button type="button" onClick={removeAvatar} title="Remove photo" style={{ position: "absolute", top: -4, right: -4, background: "var(--color-background)", border: "1px solid var(--color-border)", borderRadius: "50%", width: "1.25rem", height: "1.25rem", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer", fontSize: "0.6rem", color: "var(--color-muted)", padding: 0, zIndex: 10 }}>✕</button>
+                                            </div>
+                                        ) : (
+                                            <label style={{ width: "100%", height: "100%", borderRadius: "9999px", background: "var(--color-background-secondary)", border: "1px dashed var(--color-border)", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer", color: "var(--color-muted)", fontSize: "1.25rem", transition: "all 0.2s" }} onMouseEnter={e => e.currentTarget.style.borderColor = "var(--color-primary)"} onMouseLeave={e => e.currentTarget.style.borderColor = "var(--color-border)"}>
+                                                +
+                                                <input type="file" accept="image/*" onChange={(e) => handleAvatarSelect(e.target.files?.[0] || null)} style={{ display: "none" }} />
+                                            </label>
+                                        )}
+                                    </div>
                                 </div>
-                                <div>
-                                    <label style={{ display: "block", fontSize: "0.8125rem", fontWeight: 600, color: "var(--color-muted)", marginBottom: "0.5rem" }}>
-                                        Profession <span style={{ opacity: 0.5, fontWeight: 400 }}>(optional)</span>
-                                    </label>
-                                    <input
-                                        className="input"
-                                        type="text"
-                                        placeholder="Developer, Designer…"
-                                        value={profession}
-                                        onChange={(e) => setProfession(e.target.value)}
-                                        maxLength={80}
-                                    />
+                                <div style={{ flex: 1, display: "grid", gridTemplateColumns: "1fr 1fr", gap: "0.75rem", alignItems: "end" }}>
+                                    <div>
+                                        <label style={{ display: "block", fontSize: "0.8125rem", fontWeight: 600, color: "var(--color-muted)", marginBottom: "0.5rem" }}>
+                                            Your Name
+                                        </label>
+                                        <input
+                                            className="input"
+                                            type="text"
+                                            placeholder="John Doe"
+                                            value={name}
+                                            onChange={(e) => setName(e.target.value)}
+                                            required={!isAnonymous}
+                                        />
+                                    </div>
+                                    <div>
+                                        <label style={{ display: "block", fontSize: "0.8125rem", fontWeight: 600, color: "var(--color-muted)", marginBottom: "0.5rem" }}>
+                                            Profession <span style={{ opacity: 0.5, fontWeight: 400 }}>(optional)</span>
+                                        </label>
+                                        <input
+                                            className="input"
+                                            type="text"
+                                            placeholder="Developer, Designer…"
+                                            value={profession}
+                                            onChange={(e) => setProfession(e.target.value)}
+                                            maxLength={80}
+                                        />
+                                    </div>
                                 </div>
                             </div>
                         )}
@@ -356,7 +439,9 @@ export default function SubmitPage() {
                                         e.currentTarget.style.background = "var(--color-muted-light)";
                                     }}
                                 >
-                                    <span style={{ fontSize: "1.75rem" }}>📎</span>
+                                    <div style={{ color: "var(--color-primary)", marginBottom: "0.5rem" }}>
+                                        <Paperclip size={28} />
+                                    </div>
                                     <p style={{ fontSize: "0.875rem", color: "var(--color-muted)", textAlign: "center" }}>
                                         <strong style={{ color: "var(--color-primary)" }}>Click to upload</strong> or drag & drop
                                     </p>
@@ -428,9 +513,12 @@ export default function SubmitPage() {
                                     border: "1px solid rgba(248,113,113,0.2)",
                                     color: "var(--color-danger)",
                                     fontSize: "0.875rem",
+                                    display: "flex",
+                                    alignItems: "center",
+                                    gap: "0.5rem"
                                 }}
                             >
-                                ⚠ {error}
+                                <AlertCircle size={16} /> {error}
                             </div>
                         )}
 
@@ -439,13 +527,24 @@ export default function SubmitPage() {
                             type="submit"
                             className="btn-primary"
                             disabled={loading}
-                            style={{ width: "100%", padding: "0.875rem" }}
+                            style={{
+                                width: "100%",
+                                padding: "0.875rem",
+                                display: "flex",
+                                alignItems: "center",
+                                justifyContent: "center",
+                                gap: "0.5rem"
+                            }}
                         >
-                            {loading
-                                ? uploadingImage
-                                    ? "📤 Uploading image…"
-                                    : "⏳ Submitting…"
-                                : "Submit Testimonial →"}
+                            {loading ? (
+                                uploadingImage ? (
+                                    <><Upload size={16} className="animate-pulse" /> Uploading image…</>
+                                ) : (
+                                    <><Loader2 size={16} className="animate-spin" /> Submitting…</>
+                                )
+                            ) : (
+                                "Submit Testimonial →"
+                            )}
                         </button>
                     </form>
                 </div>

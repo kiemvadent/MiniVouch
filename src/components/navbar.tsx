@@ -17,9 +17,9 @@ export function Navbar() {
     const { theme, toggleTheme } = useTheme();
 
     const links = [
-        { href: "/", label: "Wall", icon: "✦" },
-        { href: "/submit", label: "Submit", icon: "✍" },
-        { href: "/dashboard", label: "My Testimonials", icon: "📊" },
+        { href: "/", label: "Wall" },
+        { href: "/submit", label: "Submit" },
+        { href: "/dashboard", label: "My Testimonials" },
     ];
 
     return (
@@ -245,7 +245,6 @@ export function Navbar() {
                                     gap: "0.75rem",
                                 }}
                             >
-                                <span>{link.icon}</span>
                                 {link.label}
                             </Link>
                         );

@@ -12,9 +12,6 @@ const inter = Inter({ subsets: ["latin"] });
 export const metadata: Metadata = {
     title: "MiniVouch — Testimonials That Matter",
     description: "Collect and showcase genuine testimonials. Real feedback from real people.",
-    icons: {
-        icon: "/icon",
-    },
 };
 
 export default function RootLayout({

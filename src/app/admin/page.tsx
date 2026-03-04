@@ -303,45 +303,65 @@ export default function AdminPage() {
                                     marginBottom: "0.75rem",
                                 }}
                             >
-                                <div>
-                                    <p
+                                <div style={{ display: "flex", gap: "0.75rem", alignItems: "center" }}>
+                                    {/* Avatar */}
+                                    <div
                                         style={{
-                                            fontWeight: 600,
-                                            fontSize: "0.9375rem",
-                                            color: "var(--color-foreground)",
-                                        }}
-                                    >
-                                        {t.is_anonymous ? "Anonymous" : t.name}
-                                    </p>
-                                    <p
-                                        style={{
-                                            fontSize: "0.75rem",
+                                            width: "2.5rem",
+                                            height: "2.5rem",
+                                            borderRadius: "9999px",
+                                            background: "var(--color-muted-light)",
+                                            display: "flex",
+                                            alignItems: "center",
+                                            justifyContent: "center",
                                             color: "var(--color-muted)",
-                                            marginTop: "0.125rem",
+                                            fontSize: "0.875rem",
+                                            fontWeight: 600,
+                                            flexShrink: 0,
+                                            overflow: "hidden",
                                         }}
                                     >
-                                        {new Date(t.created_at).toLocaleDateString("en-US", {
-                                            year: "numeric",
-                                            month: "short",
-                                            day: "numeric",
-                                            hour: "2-digit",
-                                            minute: "2-digit",
-                                        })}
-                                    </p>
+                                        {t.image_url ? (
+                                            <Image
+                                                src={t.image_url}
+                                                alt={t.name}
+                                                width={40}
+                                                height={40}
+                                                style={{ objectFit: "cover", width: "100%", height: "100%" }}
+                                            />
+                                        ) : (
+                                            t.name.charAt(0).toUpperCase()
+                                        )}
+                                    </div>
+                                    <div>
+                                        <p
+                                            style={{
+                                                fontWeight: 600,
+                                                fontSize: "0.9375rem",
+                                                color: "var(--color-foreground)",
+                                            }}
+                                        >
+                                            {t.is_anonymous ? "Anonymous" : t.name}
+                                        </p>
+                                        <p
+                                            style={{
+                                                fontSize: "0.75rem",
+                                                color: "var(--color-muted)",
+                                                marginTop: "0.125rem",
+                                            }}
+                                        >
+                                            {new Date(t.created_at).toLocaleDateString("en-US", {
+                                                year: "numeric",
+                                                month: "short",
+                                                day: "numeric",
+                                                hour: "2-digit",
+                                                minute: "2-digit",
+                                            })}
+                                        </p>
+                                    </div>
                                 </div>
                                 <StatusBadge status={t.status} />
                             </div>
-
-                            <p
-                                style={{
-                                    fontSize: "0.9375rem",
-                                    lineHeight: 1.7,
-                                    color: "var(--color-card-foreground)",
-                                    marginBottom: "1rem",
-                                }}
-                            >
-                                {t.message}
-                            </p>
 
                             {/* Attachment Image */}
                             {t.attachment_url && (
@@ -370,6 +390,17 @@ export default function AdminPage() {
                                     />
                                 </div>
                             )}
+
+                            <p
+                                style={{
+                                    fontSize: "0.9375rem",
+                                    lineHeight: 1.7,
+                                    color: "var(--color-card-foreground)",
+                                    marginBottom: "1rem",
+                                }}
+                            >
+                                {t.message}
+                            </p>
 
                             <div
                                 style={{

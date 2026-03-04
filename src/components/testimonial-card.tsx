@@ -1,4 +1,5 @@
 import Image from "next/image";
+import { User } from "lucide-react";
 
 interface TestimonialCardProps {
     name: string;
@@ -75,7 +76,7 @@ export function TestimonialCard({
                                 fontSize: "0.9375rem",
                             }}
                         >
-                            {is_anonymous ? "?" : displayName.charAt(0).toUpperCase()}
+                            {is_anonymous ? <User size={20} /> : displayName.charAt(0).toUpperCase()}
                         </div>
                     )}
                 </div>
