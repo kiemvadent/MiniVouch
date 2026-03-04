@@ -40,10 +40,13 @@ This is the core table storing all feedback.
 - **Logic:** Validates the session via Clerk. Inserts a new row into Supabase with `status='pending'` and the `user_id` from the token.
 
 ### `PATCH /api/testimonials`
-- **Description:** Admin action to update testimonial status (approve/reject).
-- **Auth:** Required (Must match `ADMIN_USER_ID`).
-- **Body:** `{ id, status }`
-- **Logic:** Updates the status column of the specified testimonial ID.
+- **Description:** Updates a testimonial. Used by both Admins (for status changes) and Users (for editing their own pending entries).
+- **Auth:** Required.
+- **Body:** `{ id, message?, name?, profession?, image_url?, attachment_url?, is_anonymous?, status? }`
+- **Logic:** 
+  - If `status` is provided, verifies `ADMIN_USER_ID`.
+  - If other fields are provided, verifies ownership and that `status` is `'pending'`.
+  - Handles anonymity logic by resetting `name` and `image_url` if `is_anonymous` is updated to true.
 
 ### `DELETE /api/testimonials`
 - **Description:** Admin action to delete a testimonial.
@@ -61,7 +64,10 @@ This is the core table storing all feedback.
 
 ### `TestimonialCard` (`src/components/testimonial-card.tsx`)
 - **Props:** `name`, `profession`, `message`, `is_anonymous`, `image_url`, `attachment_url`, `created_at`
-- **Logic:** Handles the display state based on `is_anonymous`. If true, displays a generic "User" icon and pseudonym. If false, displays the actual `image_url` and `name`.
+- **Logic:** Provides a consistent high-fidelity layout used across the public Wall and User Dashboard. 
+  - **Header:** Consolidates avatar, name, profession, and date.
+  - **Anonymity:** If `is_anonymous` is true, masks identifiable data and displays "Identity Hidden".
+  - **Attachment:** Displays evidentiary images above the message block.
 
 ### `Navbar` (`src/components/navbar.tsx`)
 - **Logic:** Dynamically renders links based on Clerk's `useAuth()` hook. Shows "Dashboard" if logged in, otherwise "Login". Shows a "Theme Toggle" for light/dark mode.

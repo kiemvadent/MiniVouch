@@ -28,8 +28,12 @@ graph TD
 ### 3.1 Frontend (Next.js App)
 - **Public Wall (`/`):** Displays approved testimonials. Supports filtering and pagination.
 - **Submission Form (`/submit`):** Authenticated users can submit feedback, optionally attaching an image and selecting their visibility (anonymous or public).
-- **User Dashboard (`/dashboard`):** Users can view their submitted testimonials and their approval status.
+- **User Dashboard (`/dashboard`):** Users can manage their feedback, including editing pending testimonials, toggling anonymity, and tracking approval status.
 - **Admin Panel (`/admin`):** A protected route for the site owner to approve, reject, or delete submissions.
+
+## 4. UI/UX Principles
+- **Flow Consistency:** The testimonial editing process in the dashboard mirrors the submission form flow (Identity -> Message -> Attachment).
+- **Consolidated Layouts:** Testimonial cards use a standardized structure across the public Wall and User Dashboard to ensure a consistent experience.
 
 ### 3.2 Authentication Layer (Clerk)
 - Handles user sign-up, sign-in, and session management.

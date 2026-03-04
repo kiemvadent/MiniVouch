@@ -10,6 +10,7 @@ interface Testimonial {
     user_id: string;
     name: string;
     message: string;
+    profession?: string | null;
     is_anonymous: boolean;
     image_url?: string | null;
     attachment_url?: string | null;
@@ -339,9 +340,25 @@ export default function AdminPage() {
                                                 fontWeight: 600,
                                                 fontSize: "0.9375rem",
                                                 color: "var(--color-foreground)",
+                                                display: "flex",
+                                                alignItems: "center",
+                                                gap: "0.5rem"
                                             }}
                                         >
                                             {t.is_anonymous ? "Anonymous" : t.name}
+                                            {!t.is_anonymous && t.profession && (
+                                                <span style={{
+                                                    fontSize: "0.75rem",
+                                                    fontWeight: 500,
+                                                    color: "var(--color-muted)",
+                                                    padding: "0.15rem 0.5rem",
+                                                    borderRadius: "99px",
+                                                    background: "var(--color-muted-light)",
+                                                    border: "1px solid var(--color-border)"
+                                                }}>
+                                                    {t.profession}
+                                                </span>
+                                            )}
                                         </p>
                                         <p
                                             style={{

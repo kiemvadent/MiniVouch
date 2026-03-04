@@ -22,12 +22,12 @@ Say goodbye to messy screenshots and unverified quotes. MiniVouch ensures authen
 
 ## Features
 
-- **Authenticated Submissions:** Users must log in via Clerk to submit, ensuring real identities.
-- **Anonymous Posting:** Users can optionally hide their identity while keeping the submission verified.
+- **Seamless Management:** Users can edit or delete their pending testimonials directly from their personal dashboard.
+- **Anonymity Toggling:** Effortlessly switch between anonymous and identified states, even after submission (while pending).
 - **Custom Avatars & Attachments:** Submitters can use their default social avatar, upload a custom one, or attach evidence images.
 - **Protected Admin Panel:** Site owners can approve, reject, or delete testimonials before they appear on the public wall.
 - **Personal Dashboard:** Submitters can log in to track the status of their testimonials (Pending, Approved, Rejected).
-- **Modern UI:** Built with Tailwind CSS v4, featuring glassmorphism, smooth animations, and a rich dark mode by default.
+- **Consolidated UI:** High-fidelity cards and forms provide a uniform experience across the entire platform.
 
 ## Tech Stack
 
